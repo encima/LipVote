@@ -6,7 +6,7 @@ from bottle import route, run, template, debug, request, redirect, static_file
 def choon_list():
 	conn = sqlite3.connect('lipvote.db')
 	c = conn.cursor()
-	c.execute('SELECT id, choon, artist, votes FROM choons')
+	c.execute('SELECT id, choon, artist, votes FROM choons ORDER BY votes')
 	result = c.fetchall()
 	c.close()
 	output = template('lipvote_index', rows=result)
@@ -47,6 +47,10 @@ def upvote():
 @route('/<filename:re:.*\.css>')
 def stylesheets(filename):
     return static_file(filename, root='static/css')
+
+@route('/<filename:re:.*\.js>')
+def stylesheets(filename):
+    return static_file(filename, root='static/js')
 
 #Start server on dev port (8080) and reload when script changes are made
 run(reloader=True, port=8000)
